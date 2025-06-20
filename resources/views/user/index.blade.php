@@ -5,6 +5,15 @@
 @section('content')
     <h2 class="mb-4">Usuários Cadastrados</h2>
 
+
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+
+
     <a href="{{ url('/form') }}" class="btn btn-success mb-3">Novo Usuário</a>
 
     @if ($users->isEmpty())
@@ -41,5 +50,9 @@
                 </tbody>
             </table>
         </div>
+
+        <nav class="d-flex justify-content-center mt-4" aria-label="Paginação">
+            {{ $users->links() }}
+        </nav>
     @endif
 @endsection
