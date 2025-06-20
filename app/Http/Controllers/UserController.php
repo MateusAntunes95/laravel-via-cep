@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
@@ -28,16 +29,25 @@ class UserController extends Controller
             return response()->json(['message' => 'CEP inválido'], 422);
         }
 
-        $user = User::create($request->only(['name', 'email']));
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
         $user->address()->create([
             'cep' => $cep,
-            'logradouro' => $response['logradouro'],
-            'bairro' => $response['bairro'],
-            'cidade' => $response['localidade'],
-            'estado' => $response['uf'],
+            'logradouro' => $response['logradouro'] ?? '',
+            'bairro' => $response['bairro'] ?? '',
+            'cidade' => $response['localidade'] ?? '',
+            'estado' => $response['uf'] ?? '',
         ]);
 
-        return response()->json($user->load('address'), 201);
+        if ($request->wantsJson()) {
+            return response()->json($user->load('address'), 201);
+        }
+
+        return redirect('/')->with('success', 'Usuário cadastrado com sucesso!');
     }
+
 }
