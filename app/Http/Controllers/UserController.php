@@ -20,6 +20,7 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
+        info('chegou aqui');
         $cep = preg_replace('/[^0-9]/', '', $request->cep);
         $response = Http::get("https://viacep.com.br/ws/{$cep}/json/");
 
