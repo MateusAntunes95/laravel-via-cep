@@ -17,6 +17,11 @@
             <a class="navbar-brand" href="/">Laravel ViaCEP</a>
         </div>
     </nav>
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
     <div class="container">
         @yield('content')
